@@ -10,7 +10,8 @@ class BookRepository {
 
   Future<List<Book>> list() async {
     final res = await _dio.get('/books');
-    final data = (res.data as List).cast<Map<String, dynamic>>();
+    print(res.data["data"]);
+    final data = (res.data["data"] as List).cast<Map<String, dynamic>>();
     return data.map(Book.fromJson).toList();
   }
 
@@ -27,6 +28,7 @@ class BookRepository {
 
   Future<Book> create(Book book) async {
     final res = await _dio.post('/books', data: book.toBody());
+    print(res);
     return Book.fromJson(res.data as Map<String, dynamic>);
   }
 

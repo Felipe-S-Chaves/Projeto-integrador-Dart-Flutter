@@ -6,7 +6,7 @@ class ApiClient {
   ApiClient()
     : dio = Dio(
         BaseOptions(
-          baseUrl: "https://bibliotecabackend.gigalixirapp.com",
+          baseUrl: "https://bibliotecabackend.gigalixirapp.com/api",
           connectTimeout: const Duration(seconds: 5),
           receiveTimeout: const Duration(seconds: 5),
           headers: {"Content-Type": "application/json"},
