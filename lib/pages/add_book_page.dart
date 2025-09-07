@@ -20,6 +20,36 @@ class _AddBookPageState extends State<AddBookPage> {
   bool saving = false;
 
   Future<void> _save() async {
+    // Validação do formulário
+    if (title.text.trim().isEmpty) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Título é obrigatório',
+      );
+      return;
+    }
+
+    if (author.text.trim().isEmpty) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Autor é obrigatório',
+      );
+      return;
+    }
+
+    final pagesValue = int.tryParse(pages.text.trim());
+    if (pages.text.trim().isNotEmpty &&
+        (pagesValue == null || pagesValue < 1)) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Número de páginas deve ser um valor válido maior que zero',
+      );
+      return;
+    }
+
     setState(() => saving = true);
     try {
       final book = Book(
@@ -28,21 +58,21 @@ class _AddBookPageState extends State<AddBookPage> {
         author: author.text.trim(),
         synopsis: synopsis.text.trim().isEmpty ? null : synopsis.text.trim(),
         publisher: publisher.text.trim().isEmpty ? null : publisher.text.trim(),
-        pages: int.tryParse(pages.text.trim()),
+        pages: pagesValue,
         coverUrl: coverUrl.text.trim().isEmpty ? null : coverUrl.text.trim(),
       );
       await BookRepository().create(book);
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
-        text: 'Livro adicionado!',
+        text: 'Livro adicionado com sucesso!',
       );
       Navigator.pop(context);
     } catch (e) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        text: 'Erro: $e',
+        text: e.toString().replaceFirst('Exception: ', ''),
       );
     } finally {
       if (mounted) setState(() => saving = false);

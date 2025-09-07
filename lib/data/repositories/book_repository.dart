@@ -7,7 +7,6 @@ class BookRepository {
 
   BookRepository({Dio? dio}) : _dio = dio ?? ApiClient().dio;
 
-
   Future<List<Book>> list() async {
     final res = await _dio.get('/books');
     print(res.data["data"]);
@@ -27,8 +26,18 @@ class BookRepository {
   }
 
   Future<Book> create(Book book) async {
+    // Validação básica
+    if (book.title.trim().isEmpty) {
+      throw Exception('Título é obrigatório');
+    }
+    if (book.author.trim().isEmpty) {
+      throw Exception('Autor é obrigatório');
+    }
+    if (book.pages != null && book.pages! < 1) {
+      throw Exception('Número de páginas deve ser maior que zero');
+    }
+
     final res = await _dio.post('/books', data: book.toBody());
-    print(res);
     return Book.fromJson(res.data as Map<String, dynamic>);
   }
 

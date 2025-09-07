@@ -23,10 +23,21 @@ class UserRepository {
     required String email,
     required String role,
   }) async {
+    // Validação básica
+    if (email.trim().isEmpty) {
+      throw Exception('Email é obrigatório');
+    }
+    if (!email.contains('@')) {
+      throw Exception('Email deve ter um formato válido');
+    }
+    if (role.trim().isEmpty) {
+      throw Exception('Role é obrigatório');
+    }
+
     final res = await _dio.put(
       '/users/$id',
       data: {
-        'user': {'email': email, 'role': role},
+        'user': {'email': email.trim(), 'role': role.trim()},
       },
     );
     return AppUser.fromJson(res.data as Map<String, dynamic>);

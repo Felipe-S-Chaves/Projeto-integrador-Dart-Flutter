@@ -16,6 +16,43 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isLoading = false;
 
   Future<void> _register() async {
+    // Validação do formulário
+    if (email.text.trim().isEmpty) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Email é obrigatório',
+      );
+      return;
+    }
+
+    if (!email.text.trim().contains('@')) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Email deve ter um formato válido',
+      );
+      return;
+    }
+
+    if (password.text.trim().isEmpty) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Senha é obrigatória',
+      );
+      return;
+    }
+
+    if (password.text.trim().length < 6) {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Senha deve ter pelo menos 6 caracteres',
+      );
+      return;
+    }
+
     setState(() => isLoading = true);
     try {
       await AuthRepository().register(
@@ -26,14 +63,14 @@ class _RegisterPageState extends State<RegisterPage> {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.success,
-        text: 'Registrado com sucesso',
+        text: 'Registrado com sucesso!',
       );
       Navigator.pop(context);
     } catch (e) {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        text: 'Erro: $e',
+        text: e.toString().replaceFirst('Exception: ', ''),
       );
     } finally {
       if (mounted) setState(() => isLoading = false);
