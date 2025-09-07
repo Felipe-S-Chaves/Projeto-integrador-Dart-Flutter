@@ -31,7 +31,7 @@ Tecnologias e ferramentas utilizadas no projeto:
 - [ ] Sistema de gerenciamento de livros
     - [x] Listar livros cadastrados
     - [x] Excluir livros
-    - [ ] Editar cadastro de livros
+    - [x] Editar cadastro de livros
     - [x] Ver detalhes do livro
     - [ ] Sistema admin para cadastro de usuários
     - [ ] Sistema de busca e pesquisa de livros
